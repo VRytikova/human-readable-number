@@ -1,20 +1,27 @@
-module.exports = function toReadable (number) {
-  let num = require('num-words');
-  let readableNum = num(number);
-  let finalReadableNum='';
-  let readableNumArr = readableNum.split(' ');
-  for(let i =0; i<readableNumArr.length;i++){
-      if(readableNumArr[i]!='and'){
-          if(i!=readableNumArr.length-1) {
-              finalReadableNum = finalReadableNum + readableNumArr[i] + ' ';
-          } else{
-              finalReadableNum = finalReadableNum + readableNumArr[i];
-          }
+module.exports = function toReadable(number) {
+    let ones = ['', ' one', ' two', ' three', ' four', ' five', ' six', ' seven', ' eight', ' nine',
+        ' ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen',
+        ' seventeen', ' eighteen', ' nineteen'];
+    let tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty',
+        'ninety'];
 
-      } else {
-          readableNumArr.splice(i,0);
-      }
-  }
+   let numString = number.toString();
 
-  return finalReadableNum;
+    if (number === 0) return 'zero';
+
+    if (number < 20) {
+        return ones[number].trim();
+    }
+
+    if (numString.length === 2) {
+        return tens[numString[0]].trim() + ones[numString[1]];
+    }
+
+    if (numString.length == 3) {
+        if (numString[1] === '0' && numString[2] === '0')
+            return ones[numString[0]].trim() + ' hundred';
+        else
+            return ones[numString[0]].trim() + ' hundred ' + toReadable(+(numString[1] + numString[2])).trim();
+    }
+
 }
